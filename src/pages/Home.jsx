@@ -8,19 +8,19 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-4 h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
-      <h1 className="text-3xl font-bold mb-8">Welcome! Who is this?</h1>
+    <div className="space-y-4 h-screen flex flex-col items-center justify-baseline bg-gray-900 text-white">
+      <h1 className="text-3xl font-bold my-8">Welcome! Who is this?</h1>
         <button
-          className="bg-blue-500 w-64 h-1/3 py-4 rounded-xl text-xl font-semibold hover:bg-blue-600"
-          onClick={() => handleSelect("Zeus")}
+          className="bg-jl-red w-64 h-1/3 py-4 rounded-xl text-xl font-semibold hover:bg-jl-red_hover cursor-pointer"
+          onClick={() => handleSelect("jason")}
         >
-          Zeus
+          jason
         </button>
         <button
-          className="bg-pink-500 w-64 h-1/3 py-4 rounded-xl text-xl font-semibold hover:bg-pink-600"
-          onClick={() => handleSelect("Hera")}
+          className="bg-gq-violet w-64 h-1/3 py-4 rounded-xl text-xl font-semibold hover:bg-gq-violet_hover cursor-pointer"
+          onClick={() => handleSelect("gabby")}
         >
-          Hera
+          gabby
         </button>
     </div>
   );

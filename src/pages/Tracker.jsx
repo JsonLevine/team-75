@@ -15,12 +15,19 @@ export default function Tracker() {
   const [otherProgress, setOtherProgress] = useState({});
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-  const otherUser = username === "zeus" ? "hera" : "zeus";
+  const otherUser = username === "jason" ? "gabby" : "jason";
 
-  const userColor = username === "zeus" ? "bg-jl-red" : "bg-gq-violet";
-  const userLightColor = username === "zeus" ? "bg-jl-red_hover" : "bg-gq-violet_hover";
-  const otherUserColor = otherUser === "zeus" ? "bg-jl-red" : "bg-gq-violet";
-  const otherUserLightColor = otherUser === "zeus" ? "bg-jl-red" : "bg-gq-violet_hover";
+  const userColor = username === "jason" ? "jl-red" : "gq-violet";
+  const userLightColor = username === "jason" ? "jl-red_hover" : "gq-violet_hover";
+    const userSuccessColor = username === "jason" ? "jl-orange" : "gq-purple";
+    const userFailColor = username === "jason" ? "jl-yellow_hover" : "gq-blue";
+
+  const otherUserColor = otherUser === "jason" ? "jl-red" : "gq-violet";
+  const otherUserLightColor = otherUser === "jason" ? "jl-red_hover" : "gq-violet_hover";
+
+  const userGradient = username === "jason" ? 
+    "bg-linear-to-r from-jl-red from-40% to-gq-violet" : 
+    "bg-linear-to-r from-gq-violet from-40% to-jl-red";
  
   // Fetch today's progress for both users
   useEffect(() => {
@@ -64,38 +71,43 @@ export default function Tracker() {
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">{username}'s Tracker</h1>
 
-      <h2 className="text-xl font-semibold mb-2">Your Progress</h2>
+      <h2 className="text-xl font-semibold mb-2">Your progress for the day</h2>
       <div className="space-y-2 mb-6">
         {activities.map((act) => (
           <label key={act.key} 
           className={`
-            ${progress[act.key] ? userColor : ""}
-            ${otherProgress[act.key] && !progress[act.key] ? `${otherUserLightColor} text-black line-through opacity-70` : ""}
+            ${progress[act.key] ? `bg-${userColor}` : ""}
+            ${otherProgress[act.key] && !progress[act.key] ? `bg-${otherUserLightColor} text-black line-through opacity-70` : ""}
             ${'flex items-center justify-between border border-white p-2 rounded'}
         `}
           >
             <span>{act.label}</span>
-            <input
-              type="checkbox"
-              checked={progress[act.key] || false}
-              onChange={() => handleToggle(act.key)}
-            />
+            <button
+                type="button"
+                onClick={() => handleToggle(act.key)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 focus:outline-none
+                ${progress[act.key] ? `bg-${userSuccessColor} justify-end` : `bg-${userFailColor} justify-start`}`}
+            >
+        <div className="w-4 h-4 bg-white rounded-full shadow-md transform duration-300" />
+      </button>
           </label>
         ))}
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">{otherUser}'s Progress</h2>
+      <h2 className="text-xl font-semibold mb-2">Team's progress for the day</h2>
       <div className="space-y-2">
         {activities.map((act) => (
           <label key={act.key} 
           className={` 
-            ${otherProgress[act.key] ? otherUserColor : ""}
-            ${progress[act.key] && !otherProgress[act.key] ? `${userLightColor} text-black line-through` : ""}
+            ${otherProgress[act.key] && progress[act.key] ? userGradient : ""} 
+            ${progress[act.key] && !otherProgress[act.key] ? `bg-${userLightColor} text-black` : ""}
+            ${otherProgress[act.key] && !progress[act.key] ? `bg-${otherUserLightColor} text-black` : ""}
             ${`flex items-center justify-between border border-white p-2 rounded opacity-80`}
        `}
           >
             <span>{act.label}</span>
-            <input type="checkbox" checked={otherProgress[act.key] || false} disabled />
+            {/* <input type="checkbox" checked={otherProgress[act.key] || false} disabled /> */}
+            <span>{otherProgress[act.key] || progress[act.key] ? <strong>Completed!</strong> : "Incomplete"}</span>
           </label>
         ))}
       </div>
