@@ -1,79 +1,104 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import supabase from "../lib/supabase";
 
 const activities = [
-  { key: "workout", label: "45 Minute Workout" },
-  { key: "protein", label: "50–100g of Protein" },
-  { key: "meditation", label: "10 Minutes of Meditation" },
-  { key: "reading", label: "Read 10 Pages" },
+  { key: "workout", label: "45 minute workout" },
+  { key: "protein", label: "50-100 grams of protein" },
+  { key: "meditation", label: "10 minutes of meditation" },
+  { key: "reading", label: "10 Pages of reading" },
 ];
 
 export default function Tracker() {
-  const { user } = useParams();
-  const [todayData, setTodayData] = useState({});
+  const { username } = useParams();
+  const [progress, setProgress] = useState({});
+  const [otherProgress, setOtherProgress] = useState({});
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-  const today = new Date().toISOString().split("T")[0];
+  const otherUser = username === "zeus" ? "hera" : "zeus";
 
+  const userColor = username === "zeus" ? "bg-jl-red" : "bg-gq-violet";
+  const userLightColor = username === "zeus" ? "bg-jl-red_hover" : "bg-gq-violet_hover";
+  const otherUserColor = otherUser === "zeus" ? "bg-jl-red" : "bg-gq-violet";
+  const otherUserLightColor = otherUser === "zeus" ? "bg-jl-red" : "bg-gq-violet_hover";
+ 
+  // Fetch today's progress for both users
   useEffect(() => {
-    const fetchToday = async () => {
+    const fetchProgress = async () => {
       const { data, error } = await supabase
         .from("progress")
         .select("*")
-        .eq("user", user)
-        .eq("date", today)
-        .single();
+        .in("username", [username, otherUser])
+        .eq("date", today);
 
-      if (error && error.code !== "PGRST116") console.error(error);
-      if (data) setTodayData(data);
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const current = data.find((row) => row.username === username) || {};
+      const other = data.find((row) => row.username === otherUser) || {};
+
+      setProgress(current);
+      setOtherProgress(other);
     };
-    fetchToday();
-  }, [user, today]);
 
-  const toggleActivity = async (key) => {
-    const updated = { ...todayData, [key]: !todayData[key], user, date: today };
+    fetchProgress();
+  }, [username]);
 
-    setTodayData(updated);
+  // Handle toggling a slider for the current user
+  const handleToggle = async (key) => {
+    const updated = { ...progress, username, date: today, [key]: !progress[key] };
+    setProgress(updated);
 
     const { error } = await supabase
       .from("progress")
-      .upsert(updated, { onConflict: ["user", "date"] });
+      .upsert(updated, { onConflict: ["username", "date"] });
 
-    if (error) console.error("Error updating:", error);
+    if (error) {
+      console.error("Error saving progress:", error);
+    }
   };
 
   return (
-    <div className="h-screen bg-gray-950 text-white flex flex-col items-center pt-12 px-4">
-      <h2 className="text-2xl font-bold mb-6">Welcome, {user}</h2>
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4">{username}'s Tracker</h1>
 
-      <div className="space-y-4 w-full max-w-sm">
-        {activities.map(({ key, label }) => (
-          <div
-            key={key}
-            className="flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow-lg"
+      <h2 className="text-xl font-semibold mb-2">Your Progress</h2>
+      <div className="space-y-2 mb-6">
+        {activities.map((act) => (
+          <label key={act.key} 
+          className={`
+            ${progress[act.key] ? userColor : ""}
+            ${otherProgress[act.key] && !progress[act.key] ? `${otherUserLightColor} text-black line-through opacity-70` : ""}
+            ${'flex items-center justify-between border border-white p-2 rounded'}
+        `}
           >
-            <span>{label}</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={!!todayData[key]}
-                onChange={() => toggleActivity(key)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500"></div>
-              <span
-                className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${
-                  todayData[key] ? "translate-x-5" : ""
-                }`}
-              ></span>
-            </label>
-          </div>
+            <span>{act.label}</span>
+            <input
+              type="checkbox"
+              checked={progress[act.key] || false}
+              onChange={() => handleToggle(act.key)}
+            />
+          </label>
         ))}
       </div>
 
-      <p className="text-sm text-gray-400 mt-8">
-        Progress automatically saves to Supabase
-      </p>
+      <h2 className="text-xl font-semibold mb-2">{otherUser}'s Progress</h2>
+      <div className="space-y-2">
+        {activities.map((act) => (
+          <label key={act.key} 
+          className={` 
+            ${otherProgress[act.key] ? otherUserColor : ""}
+            ${progress[act.key] && !otherProgress[act.key] ? `${userLightColor} text-black line-through` : ""}
+            ${`flex items-center justify-between border border-white p-2 rounded opacity-80`}
+       `}
+          >
+            <span>{act.label}</span>
+            <input type="checkbox" checked={otherProgress[act.key] || false} disabled />
+          </label>
+        ))}
+      </div>
     </div>
   );
 }
