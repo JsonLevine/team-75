@@ -20,6 +20,7 @@ export default function Tracker() {
   const { username } = useParams();
   const [progress, setProgress] = useState({});
   const [otherProgress, setOtherProgress] = useState({});
+	const [isLoading, setIsLoading] = useState(true);
   const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
   const legibleDate = new Date(today).toLocaleDateString("en-US", {
     year: "numeric",
@@ -54,6 +55,7 @@ export default function Tracker() {
 
   // Fetch today's progress for both users
   useEffect(() => {
+    setIsLoading(true);
     const fetchProgress = async () => {
       const { data, error } = await supabase
         .from("progress")
@@ -63,6 +65,7 @@ export default function Tracker() {
 
       if (error) {
         console.error(error);
+        setIsLoading(false);
         return;
       }
 
@@ -71,8 +74,8 @@ export default function Tracker() {
 
       setProgress(current);
       setOtherProgress(other);
+      setIsLoading(false);
     };
-
     fetchProgress();
   }, [username]);
 
@@ -84,6 +87,7 @@ export default function Tracker() {
       date: today,
       [key]: !progress[key],
     };
+		console.log("Updating progress:", updated);
     setProgress(updated);
 
     const { error } = await supabase
@@ -94,6 +98,14 @@ export default function Tracker() {
       console.error("Error saving progress:", error);
     }
   };
+
+	if (isLoading) {
+		return (
+			<div className="flex mt-60 justify-center h-screen">
+				<div className="animate-spin rounded-full h-40 w-40 border-t-4 border-b-4 border-t-gq-purple border-b-jl-red"></div>
+			</div>
+		);
+	}
 
   return (
     <div className="p-4 max-w-md mx-auto">
