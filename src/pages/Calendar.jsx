@@ -73,14 +73,14 @@ export default function Calendar() {
       case 2:
         return "bg-linear-to-t from-yellow-500 from-40% to-gray-200 to-60% text-black border-2 border-yellow-400";
       case 3:
-        return "bg-linear-to-t from-blue-500 from-60% to-gray-200 to-80% text-white border-2 border-blue-400";
+        return "bg-linear-to-t from-blue-500 from-60% to-gray-200 to-80% text-black border-2 border-blue-400";
       case 4:
       case 5:
       case 6:
       case 7:
         return "bg-green-500 text-white font-bold border-2 border-green-400";
       case 8:
-        return "bg-linear-to-r from-gq-violet to-jl-red text-white font-bold";
+        return "bg-linear-to-r from-gq-violet to-jl-red text-white font-bold border-2 border-gq-violet border-t-jl-red border-r-jl-red";
       default:
         return "bg-gray-200 text-gray-700";
     }
@@ -145,7 +145,7 @@ export default function Calendar() {
               className={`
 								${index === 0 ? "col-start-7" : ""} 
 								w-full h-10 flex items-center justify-center rounded ${getColor(count)}`}
-              title={`${day} — ${count}/4 activities`}
+              title={`${day} — ${count < 0 ? 0 : count}/4 activities`} //Makes the tooltip show 0 if count is -1
             >
               {monthNum + 1}/{dayNum}
               {day === today ? "★" : ""}

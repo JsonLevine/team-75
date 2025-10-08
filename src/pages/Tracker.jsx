@@ -37,17 +37,17 @@ export default function Tracker({ data, setData }) {
 
   const userColor = username === "jason" ? "jl-red" : "gq-violet";
   const userLightColor =
-    username === "jason" ? "jl-red_hover" : "gq-violet_hover";
-  const userSuccessColor = username === "jason" ? "jl-orange" : "gq-purple";
-  const userFailColor = username === "jason" ? "jl-yellow_hover" : "gq-blue";
+    username === "jason" ? "jl-red" : "gq-violet_hover";
+  const userSuccessColor = username === "jason" ? "jl-red_hover" : "gq-purple";
+  const userFailColor = username === "jason" ? "jl-red" : "gq-violet";
 
   const otherUserSuccessColor =
     username === "jason" ? "gq-purple" : "jl-orange";
   const otherUserFailColor =
-    username === "jason" ? "gq-blue" : "jl-yellow_hover";
+    username === "jason" ? "gq-blue" : "jl-red_hover";
   const otherUserColor = username === "jason" ? "gq-violet" : "jl-red";
   const otherUserLightColor =
-    username === "jason" ? "gq-violet_hover" : "jl-red_hover";
+    username === "jason" ? "gq-violet_hover" : "jl-red";
 
   const userGradient =
     username === "jason"
