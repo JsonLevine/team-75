@@ -21,15 +21,15 @@ const today = new Date()
 
 export default function Calendar() {
   const [dayProgress, setDayProgress] = useState({}); // { "2025-10-18": 3, ... }
-	const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-		setIsLoading(true);
+    setIsLoading(true);
     const fetchProgress = async () => {
       const { data, error } = await supabase.from("progress").select("*");
       if (error) {
         console.error(error);
-				setIsLoading(false);
+        setIsLoading(false);
         return;
       }
 
@@ -39,7 +39,6 @@ export default function Calendar() {
         // Count how many activities have been completed by both users individually (max 8)
         let completedCount = 0;
         users.forEach((user) => {
-
           activityKeys.forEach((activity) => {
             const estDate = new Date(
               new Date(day).toLocaleString("en-US", {
@@ -56,8 +55,8 @@ export default function Calendar() {
         progressMap[day] = completedCount;
       });
       setDayProgress(progressMap);
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			setIsLoading(false);
+      await new Promise((resolve) => setTimeout(resolve, 1400));
+      setIsLoading(false);
     };
 
     fetchProgress();
@@ -65,10 +64,10 @@ export default function Calendar() {
 
   const getColor = (count) => {
     switch (count) {
-			case -1: // missed day
-				return "bg-gray-200 text-gray-700 border-2 border-red-400";
+      case -1: // missed day
+        return "bg-gray-200 text-gray-700 border-2 border-red-400";
       case 0:
-				return "bg-gray-200 text-gray-700";
+        return "bg-gray-200 text-gray-700";
       case 1:
         return "bg-linear-to-t from-orange-500 from-10% to-gray-200 to-30% text-black border-2 border-orange-400";
       case 2:
@@ -87,26 +86,26 @@ export default function Calendar() {
     }
   };
 
-	if (isLoading) {
-		return (
-			<>
-			<h1 className="text-2xl font-bold p-4 text-center">
-			Team-75 Combined Progress
-		</h1>
-			<div className="w-full flex flex-col items-center justify-center">
-				<div className="grid grid-cols-7 gap-1 mb-6 animate-[drawCalendar_1s_ease-in-out_forwards]">
-					{days.map((_, i) => (
-						<div
-							key={i}
-							className={`${
-                i === 0 ? "col-start-7" : ""
-              } w-13 h-10 bg-gray-100 rounded opacity-0 animate-[fadeInCell_0.8s_ease-in-out_forwards]`}
-							style={{ animationDelay: `${i * 0.01}s` }}
-						></div>
-					))}
-				</div>
-				<style>
-					{`
+  if (isLoading) {
+    return (
+      <div className="p-4 max-w-md mx-auto">
+        <h1 className="text-2xl font-bold mb-4 text-center">
+          Team-75 Combined Progress
+        </h1>
+        <div className="w-full flex flex-col items-center justify-center">
+          <div className="grid grid-cols-7 gap-1 mb-6 animate-[drawCalendar_1s_ease-in-out_forwards]">
+            {days.map((_, i) => (
+              <div
+                key={i}
+                className={`${
+                  i === 0 ? "col-start-7" : ""
+                } w-13 h-10 bg-gray-200 rounded opacity-0 animate-[fadeInCell_0.8s_ease-in-out_forwards]`}
+                style={{ animationDelay: `${i * 0.01}s` }}
+              ></div>
+            ))}
+          </div>
+          <style>
+            {`
 						@keyframes drawCalendar {
 							0% { opacity: 0; transform: scale(0.95); }
 							100% { opacity: 1; transform: scale(1); }
@@ -116,11 +115,11 @@ export default function Calendar() {
 							100% { opacity: 1; transform: scale(1); }
 						}
 					`}
-				</style>
-			</div>
-			</>
-		);
-	}
+          </style>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 max-w-md mx-auto">
@@ -131,17 +130,17 @@ export default function Calendar() {
         {days.map((day, index) => {
           let count = dayProgress[day] || 0;
           const date = new Date(day);
-					if (date < new Date(today) && count === 0){count = -1}
+          if (date < new Date(today) && count === 0) {
+            count = -1;
+          }
           const monthNum = date.getMonth();
           const dayNum = date.getDate();
           return (
             <div
               key={day}
-              className={`${
-                index === 0 ? "col-start-7" : ""
-              } w-full h-10 flex items-center justify-center rounded ${getColor(
-                count
-              )}`}
+              className={`
+								${index === 0 ? "col-start-7" : ""} 
+								w-full h-10 flex items-center justify-center rounded ${getColor(count)}`}
               title={`${day} — ${count}/4 activities`}
             >
               {monthNum + 1}/{dayNum}
@@ -150,6 +149,14 @@ export default function Calendar() {
           );
         })}
       </div>
+			<style>
+            {`
+						@keyframes fadeInText {
+							0% { color: #ebe6e7;}
+							100% { color: #364153;}
+						}
+					`}
+          </style>
     </div>
   );
 }

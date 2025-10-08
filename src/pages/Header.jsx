@@ -10,7 +10,7 @@ function Header() {
       <nav className="space-x-4">
         <Link
           to="/calendar"
-          className="text-2xl bg-gray-800 font-bold ring rounded p-2 hover:bg-gray-600"
+          className="text-2xl bg-gray-900 font-bold ring rounded p-2 hover:bg-gray-600"
         >
           Total Progress
         </Link>
