@@ -92,17 +92,22 @@ export default function Calendar() {
         <h1 className="text-2xl font-bold mb-4 text-center">
           Team-75 Combined Progress
         </h1>
-        <div className="w-full flex flex-col items-center justify-center">
-          <div className="grid grid-cols-7 gap-1 mb-6 animate-[drawCalendar_1s_ease-in-out_forwards]">
-            {days.map((_, i) => (
+          <div className="grid grid-cols-7 gap-1 animate-[drawCalendar_1s_ease-in-out_forwards]">
+            {days.map((day, i) => {
+							 const date = new Date(day);
+							 const monthNum = date.getMonth();
+							 const dayNum = date.getDate();
+							 return (
               <div
                 key={i}
                 className={`${
                   i === 0 ? "col-start-7" : ""
-                } w-13 h-10 bg-gray-200 rounded opacity-0 animate-[fadeInCell_0.8s_ease-in-out_forwards]`}
+                } w-full h-10 bg-gray-200 flex items-center justify-center text-gray-800 rounded opacity-0 animate-[fadeInCell_0.8s_ease-in-out_forwards]`}
                 style={{ animationDelay: `${i * 0.01}s` }}
-              ></div>
-            ))}
+              >
+								{monthNum + 1}/{dayNum}
+							</div>)
+						})}
           </div>
           <style>
             {`
@@ -116,7 +121,6 @@ export default function Calendar() {
 						}
 					`}
           </style>
-        </div>
       </div>
     );
   }

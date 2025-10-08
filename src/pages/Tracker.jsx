@@ -16,12 +16,17 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function Tracker() {
+export default function Tracker({ data, setData }) {
   const { username } = useParams();
-  const [progress, setProgress] = useState({});
-  const [otherProgress, setOtherProgress] = useState({});
-	const [isLoading, setIsLoading] = useState(true);
-  const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
+
+	const [progress, setProgress] = useState(
+	data && (username === "jason" ? data.jason : data.gabby) ? (username === "jason" ? data.jason : data.gabby) : {}
+	);
+	const [otherProgress, setOtherProgress] = useState(
+	data && (username === "jason" ? data.gabby : data.jason) ? (username === "jason" ? data.gabby : data.jason) : {}
+	);
+
+	const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
   const legibleDate = new Date(today).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -55,7 +60,6 @@ export default function Tracker() {
 
   // Fetch today's progress for both users
   useEffect(() => {
-    setIsLoading(true);
     const fetchProgress = async () => {
       const { data, error } = await supabase
         .from("progress")
@@ -71,10 +75,10 @@ export default function Tracker() {
 
       const current = data.find((row) => row.username === username) || {};
       const other = data.find((row) => row.username === otherUser) || {};
-
+			const newData = username === "jason" ? { jason: current, gabby: other } : { jason: other, gabby: current };
+			setData(newData);
       setProgress(current);
       setOtherProgress(other);
-      setIsLoading(false);
     };
     fetchProgress();
   }, [username]);
@@ -87,7 +91,7 @@ export default function Tracker() {
       date: today,
       [key]: !progress[key],
     };
-		console.log("Updating progress:", updated);
+		setData(username === "jason" ? { jason: updated, gabby: otherProgress } : { jason: otherProgress, gabby: updated });
     setProgress(updated);
 
     const { error } = await supabase
@@ -98,14 +102,6 @@ export default function Tracker() {
       console.error("Error saving progress:", error);
     }
   };
-
-	if (isLoading) {
-		return (
-			<div className="flex mt-60 justify-center h-screen">
-				<div className="animate-spin rounded-full h-40 w-40 border-t-4 border-b-4 border-t-gq-purple border-b-jl-red"></div>
-			</div>
-		);
-	}
 
   return (
     <div className="p-4 max-w-md mx-auto">
