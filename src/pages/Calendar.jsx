@@ -153,14 +153,6 @@ export default function Calendar() {
           );
         })}
       </div>
-			<style>
-            {`
-						@keyframes fadeInText {
-							0% { color: #ebe6e7;}
-							100% { color: #364153;}
-						}
-					`}
-          </style>
     </div>
   );
 }
