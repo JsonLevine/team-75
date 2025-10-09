@@ -22,6 +22,7 @@ const today = new Date()
 export default function Calendar() {
   const [dayProgress, setDayProgress] = useState({}); // { "2025-10-18": 3, ... }
   const [isLoading, setIsLoading] = useState(true);
+	const [distinctCompletedCount, setDistinctCompletedCount] = useState({});
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,10 +35,12 @@ export default function Calendar() {
       }
 
       const progressMap = {};
+			const distinctCompleted = {};
 
       days.forEach((day) => {
         // Count how many activities have been completed by both users individually (max 8)
         let completedCount = 0;
+				const completedActivities = new Set();
         users.forEach((user) => {
           activityKeys.forEach((activity) => {
             const estDate = new Date(
@@ -45,6 +48,14 @@ export default function Calendar() {
                 timeZone: "America/New_York",
               })
             );
+						if (users.some(u => {
+							const row = data.find(
+								(r) => r.username === u && r.date === estDate.toISOString().split("T")[0]
+							);
+							return row && row[activity];
+						})) {
+							completedActivities.add(activity);
+						}
             const formattedDay = estDate.toISOString().split("T")[0]; // 'YYYY-MM-DD'
             const row = data.find(
               (r) => r.username === user && r.date === formattedDay
@@ -53,7 +64,9 @@ export default function Calendar() {
           });
         });
         progressMap[day] = completedCount;
+				distinctCompleted[day] = completedActivities.size;
       });
+			setDistinctCompletedCount(distinctCompleted);
       setDayProgress(progressMap);
       await new Promise((resolve) => setTimeout(resolve, 1400));
       setIsLoading(false);
@@ -132,10 +145,11 @@ export default function Calendar() {
       </h1>
       <div className="grid grid-cols-7 gap-1">
         {days.map((day, index) => {
-          let count = dayProgress[day] || 0;
+					let count = dayProgress[day] || 0
+					let distinctCount = (count == 8? count : distinctCompletedCount[day] || 0)
           const date = new Date(day);
-          if (date < new Date(today) && count === 0) {
-            count = -1;
+          if (date < new Date(today) && distinctCount === 0) {
+            distinctCount = -1;
           }
           const monthNum = date.getMonth();
           const dayNum = date.getDate();
@@ -144,9 +158,10 @@ export default function Calendar() {
               key={day}
               className={`
 								${index === 0 ? "col-start-7" : ""} 
-								w-full h-10 flex items-center justify-center rounded ${getColor(count)}`}
-              title={`${day} — ${count < 0 ? 0 : count}/4 activities`} //Makes the tooltip show 0 if count is -1
+								w-full h-10 flex items-center justify-center rounded ${getColor(distinctCount)}`}
+              title={`${day} — ${distinctCount < 0 ? 0 : distinctCount}/4 activities`} //Makes the tooltip show 0 if count is -1
             >
+							
               {monthNum + 1}/{dayNum}
               {day === today ? "★" : ""}
             </div>
