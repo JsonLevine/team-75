@@ -32,6 +32,17 @@ export default function Tracker({ data, setData }) {
     month: "long",
     day: "numeric",
   });
+	const startDate = new Date(2025, 9, 2); // Month is 0-indexed: 9 = October
+	const totalDays = 75;
+
+	// Generate array of 75 sequential dates
+	const days = Array.from({ length: 75 }, (_, i) => {
+		const date = new Date(startDate);
+		date.setDate(date.getDate() + i);
+		return date
+			.toLocaleString("en-US", { timeZone: "America/New_York" })
+			.split(",")[0]; // YYYY-MM-DD
+	});
 
   const otherUser = username === "jason" ? "gabby" : "jason";
 
@@ -105,12 +116,18 @@ export default function Tracker({ data, setData }) {
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <h1
-        className={`${`${userTextColor}`} border border-white rounded-3xl p-5 text-2xl font-bold mb-4`}
+      <div
+        className={`${`${userTextColor}`} flex flex-row justify-around text-center border border-white rounded-3xl p-5 text-2xl font-bold mb-4`}
       >
-        {capitalizeFirstLetter(username)}'s Tracker for
-        <br /> <strong className={otherUserTextColor}>{legibleDate}</strong>
-      </h1>
+				<div>
+					{capitalizeFirstLetter(username)}'s tracker for
+					<br /> <strong className={otherUserTextColor}>{legibleDate}</strong>
+				</div>
+				<span className="border-r border-white"></span>
+				<span className="text-xl font-medium">Day <br/> 
+					<strong className={`${`${otherUserTextColor}`}  text-3xl`}>{days.indexOf(today.split(",")[0]) + 1}</strong>
+				</span>
+      </div>
 
       <h2 className="text-xl font-semibold mb-2"><strong className={userTextColor}>Your</strong> progress for the day</h2>
       <div className="space-y-2 mb-6">
