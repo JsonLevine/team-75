@@ -5,7 +5,7 @@
       }
     },
     "redirects": [
-      { "source": "/(.*)", "destination": "/index.html", "status": 200 }
+      { "source": "/(.*)", "destination": "/", "status": 200 }
     ]
   }
   

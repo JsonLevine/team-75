@@ -59,6 +59,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
     username === "jason" ? "gq-blue" : "jl-red_hover";
   const otherUserLightColor =
     username === "jason" ? "gq-violet_hover" : "jl-red";
+  const messageBorderColor = username === "jason" ?  "border-gq-purple" : "border-jl-red";
   const userGradient =
     username === "jason"
       ? "bg-linear-to-r from-jl-red from-40% to-gq-violet"
@@ -203,7 +204,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
 
 			<div>
 				{messageReceived && (
-					<div className={`flex flex-col bg-gray-800 border-2 border-${otherUserLightColor} rounded p-3 mb-4`}>
+					<div className={`flex flex-col bg-gray-800 border-2 ${messageBorderColor} rounded p-3 mb-4`}>
 						<div>
 							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)} says: </span>
 							<span className={`mt-2 `}>{messageReceived}</span>
