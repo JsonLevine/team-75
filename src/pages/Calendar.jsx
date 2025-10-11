@@ -158,7 +158,7 @@ export default function Calendar() {
               key={day}
               className={`
 								${index === 0 ? "col-start-7" : ""} 
-								${day === today ? "underline decoration-double" : ""}
+								${day === today ? "underline" : ""}
 								w-full h-10 flex items-center justify-center rounded ${getColor(distinctCount)}`}
               title={`${day} — ${distinctCount < 0 ? 0 : distinctCount}/4 activities`} //Makes the tooltip show 0 if count is -1
             >

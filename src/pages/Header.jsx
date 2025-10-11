@@ -12,7 +12,7 @@ function Header() {
           to="/calendar"
           className="text-2xl bg-gray-900 font-bold ring rounded p-2 hover:bg-gray-600"
         >
-          Total Progress
+          Calendar
         </Link>
       </nav>
     </header>

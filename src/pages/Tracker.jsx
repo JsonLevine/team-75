@@ -16,7 +16,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function Tracker({ data, setData }) {
+export default function Tracker({ data, setData, message, setMessage }) {
   const { username } = useParams();
 	const [isDayCompleted, setIsDayCompleted] = useState(false);
 	const [progress, setProgress] = useState(
@@ -25,6 +25,9 @@ export default function Tracker({ data, setData }) {
 	const [otherProgress, setOtherProgress] = useState(
 	data && (username === "jason" ? data.gabby : data.jason) ? (username === "jason" ? data.gabby : data.jason) : {}
 	);
+	const [messageToSend, setMessageToSend] = useState("");
+	const [messageReceived, setMessageReceived] = useState("");
+	const [showMessageModal, setShowMessageModal] = useState(false);
 
 	const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
   const legibleDate = new Date(today).toLocaleDateString("en-US", {
@@ -71,6 +74,18 @@ export default function Tracker({ data, setData }) {
         .select("*")
         .in("username", [username, otherUser])
         .eq("date", today);
+			const { data: messageData, error: messageError } = await supabase
+				.from("messages")
+				.select("*")	
+				.eq("recipient", username)
+				.eq("date", today);
+			if (messageError) {
+				console.error(messageError);
+			} else if (messageData && messageData.length > 0) {
+				setMessageReceived(messageData[0].message);
+			} else {
+				setMessageReceived("");
+			}
 
       if (error) {
         console.error(error);
@@ -114,6 +129,20 @@ export default function Tracker({ data, setData }) {
       console.error("Error saving progress:", error);
     }
   };
+
+	const handleMessageSend = async () => {
+			if (messageToSend.trim() === "") return;
+			const { error } = await supabase
+				.from("messages")
+				.upsert([{ sender: username, recipient: otherUser, message: messageToSend, date: today }], 
+					{ onConflict: ["sender", "date"] });
+			if (error) {
+				console.error("Error sending message:", error);
+			} else {
+				setMessageToSend("");
+				alert("Message sent!");
+			}
+		}
 
   return (
     <div className="p-4 max-w-md mx-auto">
@@ -164,9 +193,45 @@ export default function Tracker({ data, setData }) {
           </label>
         ))}
       </div>
+			<div>
+				{messageReceived && (
+					<div className={`flex flex-col bg-gray-800 border border-${otherUserLightColor} rounded p-3 mb-4`}>
+						<div>
+							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)} says: </span>
+							<span className={`mt-2 `}>{messageReceived}</span>
+						</div>
+						<button onClick={() => setMessageReceived("")} className="block text-center rounded border p-2 mt-2 bg-gray-500">Dismiss</button>
+					</div>
+				)}
+			</div>
 
-      <h2 className="text-xl font-semibold mb-2">
-        Team progress {isDayCompleted ? <span className="text-green-400">(Day complete!)</span> : ""}
+			{!showMessageModal && <button
+				onClick={() => setShowMessageModal(!showMessageModal)}
+				className={`w-full bg-${userColor} text-white py-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold mb-2`}
+			>{showMessageModal ? "Close Message Box" : `Leave a message for ${capitalizeFirstLetter(otherUser)}`}</button>}
+
+			{showMessageModal && <div className={`bg-${userSuccessColor} p-4 rounded mb-6`}>
+				<input
+					type="text"
+					value={messageToSend}
+					onChange={e => setMessageToSend(e.target.value)}
+					placeholder={`Leave a message for ${capitalizeFirstLetter(otherUser)}...`}
+					className="w-full p-2 border-2 border-white rounded mt-2 bg-gray-800 text-white focus:outline-none focus:border-blue-500"
+				/>
+				<button
+					onClick={() => handleMessageSend()}
+					className={`mt-2 w-full bg-${userColor} text-white py-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold`}	
+				>Send</button>
+						
+				<button
+				onClick={() => setShowMessageModal(!showMessageModal)}
+				className={`w-full bg-${userColor} text-white py-2 mt-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold mb-2`}
+			>Close Message Box</button>
+
+			</div>}
+
+      <h2 className="text-xl font-semibold my-2">
+        {isDayCompleted ? <span className="text-green-400">Day complete! Go team!</span> : "Team progress"}
       </h2>
       <div className="space-y-2">
         {activities.map((act) => (
