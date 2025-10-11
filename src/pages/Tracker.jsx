@@ -50,22 +50,58 @@ export default function Tracker({ data, setData, todaysMessages }) {
 	});
 
   const otherUser = username === "jason" ? "gabby" : "jason";
+
+  /* 
+  * Primary user colors
+  * - User completed activity tile
+  * - "Leave a message" button, and modal closing buttons
+  */
   const userColor = username === "jason" ? "jl-red" : "gq-violet";
-  const userLightColor =
-    username === "jason" ? "jl-red" : "gq-violet_hover";
+
+  // Color for the "Dismiss message" button
+  const dismissMessageColor = username === "jason" ? "gq-violet" : "jl-red";
+  const dismissMessageHoverColor = username === "jason" ? "gq-violet_hover" : "jl-red_hover";
+
+  /* 
+  * Light user colors
+  * - "Leave a message" button, and modal closing buttons hover state
+  */
+  const messageButtonColor =
+    username === "jason" ? "jl-red_hover" : "gq-violet_hover";
+
+  // Colors for other user's completed activity tile
+  const otherUserCompletedActivityColor =
+    username === "jason" ? "gq-violet_hover" : "jl-red";
+
+  // Colors for user's completed activity slider
   const userSuccessColor = username === "jason" ? "jl-red_hover" : "gq-purple";
   const userFailColor = username === "jason" ? "jl-red" : "gq-violet";
-  const otherUserFailColor =
+  // Colors for other user's completed activity slider
+  const otherUserCompletedSliderColor =
     username === "jason" ? "gq-blue" : "jl-red_hover";
-  const otherUserLightColor =
-    username === "jason" ? "gq-violet_hover" : "jl-red";
+
+  // Inbound message box border color
   const messageBorderColor = username === "jason" ?  "border-gq-purple" : "border-jl-red";
+  const userBorderColor = username === "jason" ?  "border-jl-red" : "border-gq-purple";
+  // Outbound message box background color
+  const messageModalColor = username === "jason" ? "gq-violet" : "jl-red";
+
+  // Gradient for when both users have completed an activity
   const userGradient =
     username === "jason"
       ? "bg-linear-to-r from-jl-red from-40% to-gq-violet"
       : "bg-linear-to-r from-gq-violet from-40% to-jl-red";
-
+      
+  /* Text colors
+  * - User's name at top of page
+  * - "Your" in "Your progress for the day" header
+  */
   const userTextColor = username === "jason" ? "text-jl-red" : "text-gq-purple";
+
+  /* Other user text colors
+  * - Date at top of page
+  * - Other user's name in inbound message box
+  */ 
   const otherUserTextColor =
     username === "jason" ? "text-gq-purple" : "text-jl-red";
 
@@ -172,7 +208,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
             ${progress[act.key] ? `bg-${userColor} line-through` : ""}
             ${
               otherProgress[act.key] && !progress[act.key]
-                ? `bg-${otherUserLightColor} text-black line-through opacity-70`
+                ? `bg-${otherUserCompletedActivityColor} text-black line-through opacity-70`
                 : ""
             }
             ${"flex items-center justify-between border border-white p-2 rounded"}
@@ -187,7 +223,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
                   progress[act.key]
                     ? `bg-${userSuccessColor} justify-end`
                     : otherProgress[act.key]
-                    ? `bg-${otherUserFailColor} justify-start`
+                    ? `bg-${otherUserCompletedSliderColor} justify-start`
                     : `bg-${userFailColor} justify-start`
                 }
                 `}
@@ -198,9 +234,11 @@ export default function Tracker({ data, setData, todaysMessages }) {
         ))}
       </div>
 
-			<h2 className="text-3xl font-semibold my-8">
-        {isDayCompleted ? <span className="text-green-400">Day complete! Go team!</span> : ""}
-      </h2>
+      <div className="w-full text-center">
+        <h2 className="text-3xl font-semibold my-8">
+          {isDayCompleted ? <span className="text-green-700 bg-green-200 p-4 rounded ">Day complete! Go team!</span> : ""}
+        </h2>
+      </div>
 
 			<div>
 				{messageReceived && (
@@ -209,66 +247,35 @@ export default function Tracker({ data, setData, todaysMessages }) {
 							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)} says: </span>
 							<span className={`mt-2 `}>{messageReceived}</span>
 						</div>
-						<button onClick={() => setMessageReceived("")} className="block text-center rounded border p-2 mt-2 bg-gray-500">Dismiss message</button>
+						<button onClick={() => setMessageReceived("")} className={`block cursor-pointer text-center rounded border p-2 mt-8 bg-${dismissMessageColor} hover:bg-${dismissMessageHoverColor}`}>Dismiss message</button>
 					</div>
 				)}
 			</div>
 
 			{!showMessageModal && <button
 				onClick={() => setShowMessageModal(!showMessageModal)}
-				className={`w-full bg-${userColor} text-white py-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold mb-2`}
+				className={`w-full bg-${userColor} text-white py-2 rounded hover:bg-${messageButtonColor} cursor-pointer font-semibold mb-2`}
 			>{showMessageModal ? "Close Message Box" : `Leave a message for ${capitalizeFirstLetter(otherUser)}`}</button>}
 
-			{showMessageModal && <div className={`bg-${userSuccessColor} p-4 rounded mb-6`}>
+			{showMessageModal && <div className={`bg-${messageModalColor} p-4 rounded mb-6`}>
 				<input
 					type="text"
 					value={messageToSend}
 					onChange={e => setMessageToSend(e.target.value)}
 					placeholder={`Leave a message for ${capitalizeFirstLetter(otherUser)}...`}
-					className="w-full p-2 border-2 border-white rounded mt-2 bg-gray-800 text-white focus:outline-none focus:border-blue-500"
+					className={`w-full p-2 border-2 ${userBorderColor} rounded mt-2 bg-gray-800 text-white`}
 				/>
 				<button
 					onClick={() => handleMessageSend()}
-					className={`mt-2 w-full bg-${userColor} text-white py-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold`}	
+					className={`mt-2 w-full bg-${userColor} text-white py-2 rounded hover:bg-${messageButtonColor} cursor-pointer font-semibold`}	
 				>Send</button>
 						
 				<button
 				onClick={() => setShowMessageModal(!showMessageModal)}
-				className={`w-full bg-${userColor} text-white py-2 mt-2 rounded hover:bg-${userLightColor} cursor-pointer font-semibold mb-2`}
+				className={`w-full bg-${userColor} text-white py-2 mt-2 rounded hover:bg-${messageButtonColor} cursor-pointer font-semibold mb-2`}
 			>Close Message Box</button>
 
 			</div>}
-
-      {/* <div className="space-y-2">
-        {activities.map((act) => (
-          <label
-            key={act.key}
-            className={` 
-            ${otherProgress[act.key] && progress[act.key] ? `${userGradient} font-bold` : ""} 
-            ${
-              progress[act.key] && !otherProgress[act.key]
-                ? `bg-${userLightColor} text-black`
-                : ""
-            }
-            ${
-              otherProgress[act.key] && !progress[act.key]
-                ? `bg-${otherUserLightColor} text-black`
-                : ""
-            }
-            ${`flex items-center justify-between border border-white p-2 rounded opacity-80`}
-       `}
-          >
-            <span>{act.label}</span>
-            <span>
-              {otherProgress[act.key] || progress[act.key] ? (
-                <strong>Completed!</strong>
-              ) : (
-                "Incomplete"
-              )}
-            </span>
-          </label>
-        ))}
-      </div> */}
     </div>
   );
 }
