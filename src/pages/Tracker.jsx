@@ -16,7 +16,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function Tracker({ data, setData }) {
+export default function Tracker({ data, setData, todaysMessages }) {
   const { username } = useParams();
 	const [isDayCompleted, setIsDayCompleted] = useState(false);
 	const [progress, setProgress] = useState(
@@ -26,7 +26,9 @@ export default function Tracker({ data, setData }) {
 	data && (username === "jason" ? data.gabby : data.jason) ? (username === "jason" ? data.gabby : data.jason) : {}
 	);
 	const [messageToSend, setMessageToSend] = useState("");
-	const [messageReceived, setMessageReceived] = useState("");
+	const [messageReceived, setMessageReceived] = useState(
+		(todaysMessages && (username === "jason" ? todaysMessages.jason : todaysMessages.gabby)) ? (username === "jason" ? todaysMessages.jason : todaysMessages.gabby) : ""
+	);
 	const [showMessageModal, setShowMessageModal] = useState(false);
 
 	const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })

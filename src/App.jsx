@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 export default function App() {
   const [data, setData] = useState();
   const today = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })
+  const [todaysMessages, setTodaysMessages] = useState();
 
     // Fetch today's progress for both users
     useEffect(() => {
@@ -20,15 +21,25 @@ export default function App() {
           .select("*")
           .in("username", ['jason', 'gabby'])
           .eq("date", today);
-  
         if (error) {
           console.error(error);
           return;
         }
-  
+
+        const { data: messageData, error: messageError } = await supabase
+        .from("messages")
+        .select("*")	
+        .in("recipient", ['jason', 'gabby'])
+        .eq("date", today);
+        if (messageError) {
+          console.error(messageError);
+        } 
+        const messageToJason = messageData.find((row) => row.recipient === 'jason') || {};
+        const messageToGabby = messageData.find((row) => row.recipient === 'gabby') || {};
+        setTodaysMessages({ jason: messageToJason.message || '', gabby: messageToGabby.message || '' });
+
         const jason = data.find((row) => row.username === 'jason') || {};
         const gabby = data.find((row) => row.username === 'gabby') || {};
-  
         setData({ jason, gabby });
       };
       fetchProgress();
@@ -39,7 +50,7 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/tracker/:username" element={<Tracker data={data} setData={setData} />} />
+        <Route path="/tracker/:username" element={<Tracker data={data} setData={setData} todaysMessages={todaysMessages} />} />
         <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </Router>
