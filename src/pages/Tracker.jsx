@@ -18,7 +18,7 @@ function capitalizeFirstLetter(str) {
 
 export default function Tracker({ data, setData }) {
   const { username } = useParams();
-
+	const [isDayCompleted, setIsDayCompleted] = useState(false);
 	const [progress, setProgress] = useState(
 	data && (username === "jason" ? data.jason : data.gabby) ? (username === "jason" ? data.jason : data.gabby) : {}
 	);
@@ -36,7 +36,7 @@ export default function Tracker({ data, setData }) {
 	const totalDays = 75;
 
 	// Generate array of 75 sequential dates
-	const days = Array.from({ length: 75 }, (_, i) => {
+	const days = Array.from({ length: totalDays }, (_, i) => {
 		const date = new Date(startDate);
 		date.setDate(date.getDate() + i);
 		return date
@@ -45,21 +45,15 @@ export default function Tracker({ data, setData }) {
 	});
 
   const otherUser = username === "jason" ? "gabby" : "jason";
-
   const userColor = username === "jason" ? "jl-red" : "gq-violet";
   const userLightColor =
     username === "jason" ? "jl-red" : "gq-violet_hover";
   const userSuccessColor = username === "jason" ? "jl-red_hover" : "gq-purple";
   const userFailColor = username === "jason" ? "jl-red" : "gq-violet";
-
-  const otherUserSuccessColor =
-    username === "jason" ? "gq-purple" : "jl-orange";
   const otherUserFailColor =
     username === "jason" ? "gq-blue" : "jl-red_hover";
-  const otherUserColor = username === "jason" ? "gq-violet" : "jl-red";
   const otherUserLightColor =
     username === "jason" ? "gq-violet_hover" : "jl-red";
-
   const userGradient =
     username === "jason"
       ? "bg-linear-to-r from-jl-red from-40% to-gq-violet"
@@ -83,6 +77,13 @@ export default function Tracker({ data, setData }) {
         setIsLoading(false);
         return;
       }
+
+			const allDone = activities.every(act => 
+				(data.find(row => row.username === username) || {})[act.key] ||
+				(data.find(row => row.username === otherUser) || {})[act.key]
+			);
+				
+			setIsDayCompleted(allDone);
 
       const current = data.find((row) => row.username === username) || {};
       const other = data.find((row) => row.username === otherUser) || {};
@@ -165,7 +166,7 @@ export default function Tracker({ data, setData }) {
       </div>
 
       <h2 className="text-xl font-semibold mb-2">
-        Team's progress for the day
+        Team progress {isDayCompleted ? <span className="text-green-400">(Day complete!)</span> : ""}
       </h2>
       <div className="space-y-2">
         {activities.map((act) => (

@@ -86,7 +86,7 @@ export default function Calendar() {
       case 2:
         return "bg-linear-to-t from-yellow-500 from-40% to-gray-200 to-60% text-black border-2 border-yellow-400";
       case 3:
-        return "bg-linear-to-t from-blue-500 from-60% to-gray-200 to-80% text-black border-2 border-blue-400";
+        return "bg-linear-to-t from-blue-500 from-60% to-gray-200 to-80% text-white border-2 border-blue-400";
       case 4:
       case 5:
       case 6:
@@ -103,7 +103,7 @@ export default function Calendar() {
     return (
       <div className="p-4 max-w-md mx-auto">
         <h1 className="text-2xl font-bold mb-4 text-center">
-          Team-75 Combined Progress
+          Team Combined Progress
         </h1>
           <div className="grid grid-cols-7 gap-1 animate-[drawCalendar_1s_ease-in-out_forwards]">
             {days.map((day, i) => {
@@ -141,7 +141,7 @@ export default function Calendar() {
   return (
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">
-        Team-75 Combined Progress
+        Team Combined Progress
       </h1>
       <div className="grid grid-cols-7 gap-1">
         {days.map((day, index) => {
@@ -158,12 +158,11 @@ export default function Calendar() {
               key={day}
               className={`
 								${index === 0 ? "col-start-7" : ""} 
+								${day === today ? "underline decoration-double" : ""}
 								w-full h-10 flex items-center justify-center rounded ${getColor(distinctCount)}`}
               title={`${day} — ${distinctCount < 0 ? 0 : distinctCount}/4 activities`} //Makes the tooltip show 0 if count is -1
             >
-							
               {monthNum + 1}/{dayNum}
-              {day === today ? "★" : ""}
             </div>
           );
         })}
