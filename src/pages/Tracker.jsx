@@ -16,7 +16,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export default function Tracker({ data, setData, message, setMessage }) {
+export default function Tracker({ data, setData }) {
   const { username } = useParams();
 	const [isDayCompleted, setIsDayCompleted] = useState(false);
 	const [progress, setProgress] = useState(
@@ -165,7 +165,8 @@ export default function Tracker({ data, setData, message, setMessage }) {
           <label
             key={act.key}
             className={`
-            ${progress[act.key] ? `bg-${userColor}` : ""}
+						${otherProgress[act.key] && progress[act.key] ? `${userGradient} font-bold line-through` : ""}
+            ${progress[act.key] ? `bg-${userColor} line-through` : ""}
             ${
               otherProgress[act.key] && !progress[act.key]
                 ? `bg-${otherUserLightColor} text-black line-through opacity-70`
@@ -179,7 +180,7 @@ export default function Tracker({ data, setData, message, setMessage }) {
               type="button"
               onClick={() => handleToggle(act.key)}
               className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 focus:outline-none
-                ${
+								${
                   progress[act.key]
                     ? `bg-${userSuccessColor} justify-end`
                     : otherProgress[act.key]
@@ -193,14 +194,19 @@ export default function Tracker({ data, setData, message, setMessage }) {
           </label>
         ))}
       </div>
+
+			<h2 className="text-3xl font-semibold my-8">
+        {isDayCompleted ? <span className="text-green-400">Day complete! Go team!</span> : ""}
+      </h2>
+
 			<div>
 				{messageReceived && (
-					<div className={`flex flex-col bg-gray-800 border border-${otherUserLightColor} rounded p-3 mb-4`}>
+					<div className={`flex flex-col bg-gray-800 border-2 border-${otherUserLightColor} rounded p-3 mb-4`}>
 						<div>
 							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)} says: </span>
 							<span className={`mt-2 `}>{messageReceived}</span>
 						</div>
-						<button onClick={() => setMessageReceived("")} className="block text-center rounded border p-2 mt-2 bg-gray-500">Dismiss</button>
+						<button onClick={() => setMessageReceived("")} className="block text-center rounded border p-2 mt-2 bg-gray-500">Dismiss message</button>
 					</div>
 				)}
 			</div>
@@ -230,10 +236,7 @@ export default function Tracker({ data, setData, message, setMessage }) {
 
 			</div>}
 
-      <h2 className="text-xl font-semibold my-2">
-        {isDayCompleted ? <span className="text-green-400">Day complete! Go team!</span> : "Team progress"}
-      </h2>
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         {activities.map((act) => (
           <label
             key={act.key}
@@ -262,7 +265,7 @@ export default function Tracker({ data, setData, message, setMessage }) {
             </span>
           </label>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
