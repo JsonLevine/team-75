@@ -244,7 +244,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
 				{messageReceived && (
 					<div className={`flex flex-col bg-gray-800 border-2 ${messageBorderColor} rounded p-3 mb-4`}>
 						<div>
-							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)} says: </span>
+							<span className={`font-semibold ${otherUserTextColor}`}>{capitalizeFirstLetter(otherUser)}: </span>
 							<span className={`mt-2 `}>{messageReceived}</span>
 						</div>
 						<button onClick={() => setMessageReceived("")} className={`block cursor-pointer text-center rounded border p-2 mt-8 bg-${dismissMessageColor} hover:bg-${dismissMessageHoverColor}`}>Dismiss message</button>
