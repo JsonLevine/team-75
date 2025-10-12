@@ -8,7 +8,7 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-4 h-screen flex flex-col items-center justify-baseline bg-gray-900 text-white">
+    <div className="space-y-4 h-screen flex flex-col items-center justify-baseline text-white">
       <h1 className="text-3xl font-bold my-8">Welcome! Who is this?</h1>
       <button
         className="bg-jl-red w-full h-1/3 py-4 text-6xl font-semibold hover:bg-jl-red_hover cursor-pointer"
