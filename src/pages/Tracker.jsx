@@ -131,14 +131,6 @@ export default function Tracker({ data, setData, todaysMessages }) {
         setIsLoading(false);
         return;
       }
-
-			const allDone = activities.every(act => 
-				(data.find(row => row.username === username) || {})[act.key] ||
-				(data.find(row => row.username === otherUser) || {})[act.key]
-			);
-				
-			setIsDayCompleted(allDone);
-
       const current = data.find((row) => row.username === username) || {};
       const other = data.find((row) => row.username === otherUser) || {};
 			const newData = username === "jason" ? { jason: current, gabby: other } : { jason: other, gabby: current };
@@ -148,6 +140,13 @@ export default function Tracker({ data, setData, todaysMessages }) {
     };
     fetchProgress();
   }, [username]);
+
+  useEffect(() => {
+    const allDone = activities.every(act => 
+      (progress[act.key] || otherProgress[act.key])
+    );
+    setIsDayCompleted(allDone);
+  }, [progress, otherProgress]);
 
   // Handle toggling a slider for the current user
   const handleToggle = async (key) => {
