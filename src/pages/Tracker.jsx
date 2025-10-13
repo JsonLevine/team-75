@@ -6,7 +6,7 @@ const activities = [
   { key: "workout", label: "45 minute workout" },
   { key: "protein", label: "50-100 grams of protein" },
   { key: "meditation", label: "10 minutes of meditation" },
-  { key: "reading", label: "10 Pages of reading" },
+  { key: "reading", label: "10 pages of reading" },
 ];
 
 function capitalizeFirstLetter(str) {
