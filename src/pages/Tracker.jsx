@@ -203,14 +203,14 @@ export default function Tracker({ data, setData, todaysMessages }) {
           <label
             key={act.key}
             className={`
-						${otherProgress[act.key] && progress[act.key] ? `${userGradient} font-bold line-through` : ""}
-            ${progress[act.key] ? `bg-${userColor} line-through` : ""}
+						${otherProgress[act.key] && progress[act.key] ? `${userGradient} font-bold scale-105 line-through` : ""}
+            ${progress[act.key] ? `bg-${userColor} scale-105 line-through` : ""}
             ${
               otherProgress[act.key] && !progress[act.key]
                 ? `bg-${otherUserCompletedActivityColor} text-black line-through opacity-70`
                 : ""
             }
-            ${"flex items-center justify-between border border-white p-2 rounded"}
+            ${"transition-all duration-300 flex items-center justify-between border border-white p-2 rounded"}
         `}
           >
             <span>{act.label}</span>
