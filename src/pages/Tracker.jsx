@@ -4,7 +4,7 @@ import supabase from "../lib/supabase";
 
 const activities = [
   { key: "workout", label: "45 minute workout" },
-  { key: "protein", label: "50-100 grams of protein" },
+  { key: "water", label: "64 ounces of water" },
   { key: "meditation", label: "10 minutes of meditation" },
   { key: "reading", label: "10 pages of reading" },
 ];
@@ -52,7 +52,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
     month: "long",
     day: "numeric",
   });
-  const startDate = new Date(2025, 9, 2); // Month is 0-indexed: 9 = October
+  const startDate = new Date(2025, 9, 18); // Month is 0-indexed: 9 = October
   const totalDays = 75;
 
   // Generate array of 75 sequential dates
