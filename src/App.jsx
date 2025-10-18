@@ -4,6 +4,7 @@ import "./index.css";
 import Home from "./pages/Home.jsx";
 import Tracker from "./pages/Tracker.jsx";
 import Header from "./pages/Header.jsx";
+import Footer from "./pages/Footer.jsx";
 import Calendar from "./pages/Calendar.jsx";
 import Debug from "./pages/Debug.jsx";
 import supabase from "./lib/supabase";
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/debug" element={<Debug />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
