@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import Debug from "./Debug";
 
 function Header() {
   return (
@@ -8,9 +7,6 @@ function Header() {
       <Link to="/" className="font-bold text-3xl">
         Team 75
       </Link>
-      {/* <Link to="/debug" className="text-white">
-        Debug
-      </Link> */}
       <nav className="space-x-4">
         <Link
           to="/calendar"
