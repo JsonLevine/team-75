@@ -21,7 +21,7 @@ const today = new Date()
 
 export default function Calendar() {
   const [progressData, setProgressData] = useState([]);
-  const [dayProgress, setDayProgress] = useState({}); // { "2025-10-18": 3, ... }
+  const [dayProgress, setDayProgress] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [distinctCompletedCount, setDistinctCompletedCount] = useState({});
   const [selectedDay, setSelectedDay] = useState(null);
