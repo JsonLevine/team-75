@@ -34,6 +34,8 @@ export default function Tracker({ data, setData, todaysMessages }) {
       : {}
   );
   const [messageToSend, setMessageToSend] = useState("");
+  const [todaysWeight, setTodaysWeight] = useState("");
+  const [todaysWeightSubmitted, setTodaysWeightSubmitted] = useState(false);
   const [messageReceived, setMessageReceived] = useState(
     todaysMessages &&
       (username === "jason" ? todaysMessages.jason : todaysMessages.gabby)
@@ -150,11 +152,16 @@ export default function Tracker({ data, setData, todaysMessages }) {
         return;
       }
       const current = data.find((row) => row.username === username) || {};
+      const weight = current.weight || "";
       const other = data.find((row) => row.username === otherUser) || {};
       const newData =
         username === "jason"
           ? { jason: current, gabby: other }
           : { jason: other, gabby: current };
+      if (weight !== "") {
+        setTodaysWeight(weight);
+        setTodaysWeightSubmitted(true);
+      }
       setData(newData);
       setProgress(current);
       setOtherProgress(other);
@@ -216,6 +223,29 @@ export default function Tracker({ data, setData, todaysMessages }) {
     }
   };
 
+  const handleWeightSubmission = async () => {
+    if (todaysWeight.trim() === "") return;
+    const updated = {
+      ...progress,
+      username,
+      date: today,
+      weight: todaysWeight,
+    };
+    setData({ jason: updated, gabby: otherProgress });
+    setProgress(updated);
+
+    const { error } = await supabase
+      .from("progress")
+      .upsert(updated, { onConflict: ["username", "date"] });
+
+    if (error) {
+      console.error("Error saving weight:", error);
+    } else {
+      alert("Weight submitted!");
+      setTodaysWeightSubmitted(true);
+    }
+  }
+
   return (
     <div className="p-4 max-w-md mx-auto">
       <div
@@ -274,6 +304,36 @@ export default function Tracker({ data, setData, todaysMessages }) {
             </button>
           </label>
         ))}
+
+        { username === "jason" && 
+        <>
+          {!todaysWeightSubmitted ?
+            <div>
+              <input
+                type="text"
+                value={todaysWeight}
+                onChange={(e) => setTodaysWeight(e.target.value)}
+                placeholder={`Submit today's weight`}
+                className={`w-full p-2 border-2 ${userBorderColor} rounded mt-2 bg-gray-800 text-white`}
+              />
+              <button
+                onClick={() => handleWeightSubmission()}
+                className={`mt-2 w-full bg-${userColor} text-white py-2 rounded hover:bg-${messageButtonColor} cursor-pointer font-semibold`}
+              >
+                Submit
+              </button>
+            </div> :
+            
+            <div>
+              <span className="text-jl-red font-semibold">
+                {username === "jason"
+                  ? `Today's weight: ${progress.weight} lbs`
+                  : `Weight submission complete`} 
+              </span>
+            </div>
+          }
+        </>
+        }
 
         {isDayCompleted && (
           <h2 className="text-3xl text-center flex font-semibold my-8">
