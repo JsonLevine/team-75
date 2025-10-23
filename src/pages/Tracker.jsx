@@ -328,7 +328,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
               <span className="text-jl-red font-semibold">
                 {username === "jason"
                   ? `Today's weight: ${progress.weight} lbs`
-                  : ``} 
+                  : ''} 
               </span>
             </div>
           }
