@@ -337,7 +337,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
 
         {isDayCompleted && (
           <h2 className="text-3xl text-center flex font-semibold my-8">
-            <span className="w-full text-green-700 bg-green-200 p-4 rounded ">
+            <span className="w-full text-green-700 bg-green-200 p-4 rounded">
               Day complete! Go team!
             </span>
           </h2>
