@@ -9,6 +9,11 @@ const activities = [
   { key: "reading", label: "10 pages of reading" },
 ];
 
+const dayCompleteMessages = [ 
+  "Day complete! Go team!",
+  "One more day in the books!"
+];
+
 function capitalizeFirstLetter(str) {
   if (typeof str !== "string" || str.length === 0) {
     return str; // Handle empty strings or non-string inputs
@@ -246,6 +251,11 @@ export default function Tracker({ data, setData, todaysMessages }) {
     }
   }
 
+  const getRandomCompleteMessage = () => {
+    const randomIndex = Math.floor(Math.random() * dayCompleteMessages.length);
+    return dayCompleteMessages[randomIndex];
+  }
+  
   return (
     <div className="p-4 max-w-md mx-auto">
       <div
@@ -338,7 +348,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
         {isDayCompleted && (
           <h2 className="text-3xl text-center flex font-semibold my-8">
             <span className="w-full text-green-700 bg-green-200 p-4 rounded">
-              Day complete! Go team!
+              {getRandomCompleteMessage()}
             </span>
           </h2>
         )}
