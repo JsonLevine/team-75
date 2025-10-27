@@ -11,7 +11,8 @@ const activities = [
 
 const dayCompleteMessages = [ 
   "Day complete! Go team!",
-  "One more day in the books!"
+  "One more day in the books!",
+  "Nothing is impossible!",
 ];
 
 function capitalizeFirstLetter(str) {
@@ -255,7 +256,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
     const randomIndex = Math.floor(Math.random() * dayCompleteMessages.length);
     return dayCompleteMessages[randomIndex];
   }
-  
+
   return (
     <div className="p-4 max-w-md mx-auto">
       <div
