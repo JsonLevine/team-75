@@ -182,7 +182,6 @@ export default function Tracker({ data, setData, todaysMessages }) {
     setIsDayCompleted(allDone);
   }, [progress, otherProgress]);
 
-  // Handle toggling a slider for the current user
   const handleToggle = async (key) => {
     const updated = {
       ...progress,
