@@ -13,6 +13,7 @@ const dayCompleteMessages = [
   "Day complete! Go team!",
   "One more day in the books!",
   "Nothing is impossible!",
+  "Another one bites the dust!"
 ];
 
 function capitalizeFirstLetter(str) {
