@@ -114,7 +114,7 @@ export default function Calendar() {
       })
     );
 
-    const formattedDay = estDate.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    const formattedDay = estDate.toISOString().split("T")[0];
 
     // Prevent clicking future days
     if (new Date(formattedDay) > new Date(today)) return;
