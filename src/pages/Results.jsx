@@ -34,9 +34,11 @@ function Results() {
               if (meditation) results[username].meditation++;
               if (reading) results[username].reading++;
             });
-    
-        fetchData();
+
+            setResults(results);
         }
+        fetchData();
+
       }), [];
 
   return (
