@@ -10,64 +10,34 @@ const data = [
 ];
 
 function Results() {
-
     const [results, setResults] = useState(data);
     const [isLoading, setIsLoading] = useState(false);
 
-
     useEffect(() => {
-        setIsLoading(true);
-
-        const fetchProgress = async () => {
+        const fetchData = async () => {
             const { data, error } = await supabase.from("progress").select("*");
+
             if (error) {
-              console.error(error);
-              setIsLoading(false);
-              return;
+              console.error("Error loading progress", error);
+              return null;
             }
-      
-            const progressMap = {};
-            const distinctCompleted = {};
-      
-            days.forEach((day) => {
-              // Count how many activities have been completed by both users individually (max 8)
-              let completedCount = 0;
-              const completedActivities = new Set();
-              users.forEach((user) => {
-                activityKeys.forEach((activity) => {
-                  const estDate = new Date(
-                    new Date(day).toLocaleString("en-US", {
-                      timeZone: "America/New_York",
-                    })
-                  );
-                  if (
-                    users.some((u) => {
-                      const row = data.find(
-                        (r) =>
-                          r.username === u &&
-                          r.date === estDate.toISOString().split("T")[0]
-                      );
-                      return row && row[activity];
-                    })
-                  ) {
-                    completedActivities.add(activity);
-                  }
-                  const formattedDay = estDate.toISOString().split("T")[0]; // 'YYYY-MM-DD'
-                  const row = data.find(
-                    (r) => r.username === user && r.date === formattedDay
-                  );
-                  if (row && row[activity]) completedCount++;
-                });
-              });
-              progressMap[day] = completedCount;
-              distinctCompleted[day] = completedActivities.size;
+          
+            const results = {};
+          
+            data.forEach(({ username, workout, water, meditation, reading }) => {
+              if (!results[username]) {
+                results[username] = { workout: 0, water: 0, meditation: 0, reading: 0 };
+              }
+          
+              if (workout) results[username].workout++;
+              if (water) results[username].water++;
+              if (meditation) results[username].meditation++;
+              if (reading) results[username].reading++;
             });
-            setResults(data);
-            setIsLoading(false);
-          };
-      
-          fetchProgress();
-    }, []);
+    
+        fetchData();
+        }
+      }), [];
 
   return (
     <div>
