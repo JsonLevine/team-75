@@ -7,6 +7,7 @@ import Header from "./pages/Header.jsx";
 import Footer from "./pages/Footer.jsx";
 import Calendar from "./pages/Calendar.jsx";
 import Debug from "./pages/Debug.jsx";
+import Results from "./pages/Results.jsx";
 import supabase from "./lib/supabase";
 import { useState, useEffect } from "react";
 
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/tracker/:username" element={<Tracker data={data} setData={setData} todaysMessages={todaysMessages} />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/debug" element={<Debug />} />
+        <Route path="/results" element={<Results />} />
       </Routes>
       <Footer />
     </Router>

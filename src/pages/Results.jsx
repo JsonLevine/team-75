@@ -43,7 +43,7 @@ function Results() {
   return (
     <div>
         <h1>Final Results:</h1>
-
+    
     </div>
   )
 }
