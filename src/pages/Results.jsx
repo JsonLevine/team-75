@@ -38,7 +38,6 @@ function Results() {
             setResults(results);
         }
         fetchData();
-
       }), [];
 
   return (
