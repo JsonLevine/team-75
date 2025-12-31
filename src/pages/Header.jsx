@@ -7,6 +7,9 @@ function Header() {
       <Link to="/" className="font-bold text-3xl">
         Team 75
       </Link>
+      {/* <Link to ="/results" className="w-1/5 text-center font-bold text-2xl ring rounded p-2 hover:bg-gray-600">
+        Results
+      </Link> */}
       <nav className="space-x-4">
         <Link
           to="/calendar"
