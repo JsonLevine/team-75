@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import supabase from "../lib/supabase";
 
 
-const startDate = new Date(2025, 9, 18); // Month is 0-indexed: 9 = October
+const startDate = new Date(2025, 9, 18); 
 const totalDays = 75;
 const activityKeys = ["workout", "water", "meditation", "reading"];
 const users = ["jason", "gabby"];
