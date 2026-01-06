@@ -13,6 +13,7 @@ const data = [
 
 function Results() {
     const [results, setResults] = useState(data);
+    const [weights, setWeights] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -25,8 +26,9 @@ function Results() {
             }
           
             const results = {};
+            const weights = [];
           
-            data.forEach(({ username, workout, water, meditation, reading }) => {
+            data.forEach(({ username, workout, water, meditation, reading, weight }) => {
               if (!results[username]) {
                 results[username] = { workout: 0, water: 0, meditation: 0, reading: 0 };
               }
@@ -35,12 +37,17 @@ function Results() {
               if (water) results[username].water++;
               if (meditation) results[username].meditation++;
               if (reading) results[username].reading++;
+              if (weight) {
+                weights.push(weight);
+              }
             });
 
             setResults(results);
+            setWeights(weights);
+            console.log(weights)
         }
         fetchData();
-      }), [];
+      }, []);
 
       function getActivityDisplay(activity, count){
         if (count > 0) {
