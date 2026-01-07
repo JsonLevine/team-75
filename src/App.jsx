@@ -8,6 +8,7 @@ import Footer from "./pages/Footer.jsx";
 import Calendar from "./pages/Calendar.jsx";
 import Debug from "./pages/Debug.jsx";
 import Results from "./pages/Results.jsx";
+import JasonTracker from "./pages/JasonTracker.jsx";
 import supabase from "./lib/supabase";
 import { useState, useEffect } from "react";
 
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/debug" element={<Debug />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/jason-tracker" element={<JasonTracker />} />
       </Routes>
       <Footer />
     </Router>

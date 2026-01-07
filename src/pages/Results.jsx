@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import supabase from "../lib/supabase";
 
-
 const startDate = new Date(2025, 9, 18); 
 const totalDays = 75;
 const activityKeys = ["workout", "water", "meditation", "reading"];
