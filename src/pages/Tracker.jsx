@@ -41,6 +41,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
       : {}
   );
   const [messageToSend, setMessageToSend] = useState("");
+  const [weights, setWeights] = useState([]);
   const [todaysWeight, setTodaysWeight] = useState("");
   const [todaysWeightSubmitted, setTodaysWeightSubmitted] = useState(false);
   const [messageReceived, setMessageReceived] = useState(
@@ -275,11 +276,11 @@ export default function Tracker({ data, setData, todaysMessages }) {
         </span>
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">
+      {/* <h2 className="text-xl font-semibold mb-2">
         <strong className={userTextColor}>Your</strong> progress for the day
-      </h2>
+      </h2> */}
       <div className="space-y-2 mb-6">
-        {activities.map((act) => (
+        {/* {activities.map((act) => (
           <label
             key={act.key}
             className={`
@@ -314,7 +315,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
               <div className="w-4 h-4 bg-white rounded-full shadow-md transform duration-300" />
             </button>
           </label>
-        ))}
+        ))} */}
 
         { username === "jason" && 
         <>
@@ -346,16 +347,16 @@ export default function Tracker({ data, setData, todaysMessages }) {
         </>
         }
 
-        {isDayCompleted && (
+        {/* {isDayCompleted && (
           <h2 className="text-3xl text-center flex font-semibold my-8">
             <span className="w-full text-green-700 bg-green-200 p-4 rounded">
               {getRandomCompleteMessage()}
             </span>
           </h2>
-        )}
+        )} */}
       </div>
 
-      <div>
+      {/* <div>
         {messageReceived && (
           <div
             className={`flex flex-col bg-gray-800 border-2 ${messageBorderColor} rounded p-3 mb-4`}
@@ -374,9 +375,9 @@ export default function Tracker({ data, setData, todaysMessages }) {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
 
-      {!showMessageModal && (
+      {/* {!showMessageModal && (
         <button
           onClick={() => setShowMessageModal(!showMessageModal)}
           className={`w-full bg-${userColor} text-white py-2 rounded hover:bg-${messageButtonColor} cursor-pointer font-semibold mb-2`}
@@ -385,9 +386,9 @@ export default function Tracker({ data, setData, todaysMessages }) {
             ? "Close Message Box"
             : `Leave a message for ${capitalizeFirstLetter(otherUser)}`}
         </button>
-      )}
+      )} */}
 
-      {showMessageModal && (
+      {/* {showMessageModal && (
         <div className={`bg-${messageModalColor} p-4 rounded mb-6`}>
           <input
             type="text"
@@ -412,7 +413,7 @@ export default function Tracker({ data, setData, todaysMessages }) {
             Close Message Box
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
