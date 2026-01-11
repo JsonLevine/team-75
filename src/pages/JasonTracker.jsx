@@ -16,7 +16,7 @@ function JasonTracker() {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("progress")
-        .select("*")
+        .select("*") 
         .in("username", ["jason"])
 
       if (error) {
